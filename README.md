@@ -6,7 +6,6 @@ core: ide   核心
 setup 
 
 
-
-adfasdf
+cd lixbra
 
   

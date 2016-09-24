@@ -7,5 +7,6 @@ setup
 
 
 cd lixbra
+guo
 
   

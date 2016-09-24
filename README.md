@@ -6,7 +6,4 @@ core: ide   核心
 setup 
 
 
-cd lixbra
-guo
-
   

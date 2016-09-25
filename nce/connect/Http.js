@@ -1,5 +1,5 @@
 const Connect = require('./Connect');
-class Ws extends Connect {
+class Http extends Connect {
     constructor({host = '127.0.0.1',
         port = 8765,
         timeout = 3000,
@@ -23,4 +23,4 @@ class Ws extends Connect {
         }
     }
 }
-module.exports = Ws;
+module.exports = Http;

@@ -1,6 +1,6 @@
 'use strict'
 const assert = require('assert');
-
+const CACHE_TYPE = require('../utils/Common').CACHE_TYPE;
 class Cache {
     /**
     * maxSize :缓存大小,
@@ -13,7 +13,7 @@ class Cache {
     constructor({
         maxSize = 1000,
         expiryTime = 1000,
-        type = 0,
+        type = CACHE_TYPE.NORMAL,
         tickTime = 100,
         tickNum = 100,
         timeOutCallback = null
@@ -24,7 +24,7 @@ class Cache {
         this._expiryTime = expiryTime < 1000 ? 1000 : expiryTime; // 毫秒   超时时间  不得  小于  1 秒钟 
         this._tickTime = tickTime > 100 ? tickTime : 100;
 
-        this._tickNum = tickNum>this._maxSize ? this._maxSize :tickNum;
+        this._tickNum = tickNum > this._maxSize ? this._maxSize : tickNum;
         this._checkNum = this._tickNum * 1.2;
         this._timeOutCallback = null;
         if (timeOutCallback instanceof Function) {
@@ -52,6 +52,7 @@ class Cache {
                 }
                 retCb = false;
                 hitNum++;
+                this._cache.delete(key);
                 if (value.callback) {
                     let ret = value.callback(key, value.value);
                     if (ret instanceof Boolean) {
@@ -61,7 +62,7 @@ class Cache {
                 if (!retCb && this._timeOutCallback) {
                     this._timeOutCallback(key, value.value);
                 }
-                this._cache.delete(key);
+
                 //TODO 在这里可以动态调整滴答时间和tickNum
                 if (checkNum >= this._checkNum) {
                     break;
@@ -82,7 +83,13 @@ class Cache {
 
         this._cache.delete(key);
         if (this._cache.size >= this._maxSize) {
-            return null;
+            if (CACHE_TYPE.FIFO === this._type) {
+                let firstkey = this._cache.keys().next().value;
+                 this._cache.delete(firstkey);
+            } else {
+                return null;
+            }
+
         }
         let _callback = null;
 

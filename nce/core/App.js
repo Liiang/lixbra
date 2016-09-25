@@ -1,4 +1,5 @@
 'use strict'
+
 class _App {
     constructor() {
 
@@ -12,9 +13,14 @@ class _App {
     }
     addProxy() {
 
-    } addService() {
+    }
+    addService() {
 
-    } config() { }
+    }
+    addProtol({host = '127.0.0.1', port = 8765, type = 0} = {}) {
+
+    }
+    config() { }
     toString() {
         this._n++;
         console.info(Date.now(), this.now);
@@ -23,14 +29,12 @@ class _App {
 let instance = null;
 let App = new Proxy(_App, {
     construct: function (target, args) {
-        // console.info('const AppProxy');
         if (!instance) {
             instance = new target(args);
         }
         return instance;
     },
     apply: function (target, ctx, args) {
-        //console.info('apply AppProxy');
         if (!instance) {
             instance = new target(args);
         }

@@ -6,6 +6,7 @@ class TestService extends Service {
             age: 0,
             login: () => {
                 //
+                console.info(1234);
                 return this.age;
             }
 

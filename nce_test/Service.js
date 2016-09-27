@@ -7,6 +7,7 @@ class TestService extends Service {
             login: () => {
                 return this.age;
             }
+            
         });
     }
     login({

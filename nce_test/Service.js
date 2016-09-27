@@ -5,9 +5,10 @@ class TestService extends Service {
         super("gege", {
             age: 0,
             login: () => {
+                //
                 return this.age;
             }
-            
+
         });
     }
     login({

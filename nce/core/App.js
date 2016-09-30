@@ -1,7 +1,9 @@
 'use strict'
+const Protocol=require('./Protocol')
+const Session=require('./Session')
 
 class _App {
-    constructor() {
+    constructor(cbFun) {
 
         this._now = Date.now();
         //  console.info('init _App');协议列表
@@ -10,27 +12,30 @@ class _App {
         // 服务  
         this._mService = new Map();
         // 协议 
-        this._mProtocols = new Map();
-        this._sessionMaxSize=10000;
-        this._session=null;
+        
+       // this._sessionMaxSize=10000;
+        this._session=new Session();
+        this._protol=new Protocol();
+        cbFun(this);
     }
-
+ addConnectType(args) {
+         this._protol.addConnectType(args);
+    }
     get now() {
         return this._now;
     }
-    addProxy() {
-
+    addProxy(proxy) {
+        this._mProxy.set(null,null);
     }
-    addService() {
-
+    addService(server) {
+        let name=server.name;
+     //   let exports=server.exports();
+        this._mService.set(name,server);
     }
-    addProtol({
-        host = '127.0.0.1',
-        port = 8765,
-        type = 0
-    } = {}) {
-
+    setProtol(protol) {
+        this._protol=protol;
     }
+    
     get session(){
         return this._session;
     }
@@ -39,19 +44,19 @@ class _App {
         this._n++;
         console.info(Date.now(), this.now);
     }
-    run() {}
+    run(cbFun) {}
 }
 let instance = null;
 let App = new Proxy(_App, {
     construct: function(target, args) {
         if (!instance) {
-            instance = new target(args);
+            instance = Reflect.construct(target,args);
         }
         return instance;
     },
     apply: function(target, ctx, args) {
         if (!instance) {
-            instance = new target(args);
+            instance =  Reflect.construct(target,args);
         }
         return instance;
     }

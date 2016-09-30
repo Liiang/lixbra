@@ -1,5 +1,6 @@
 
 const Connect = require('./Connect');
+const CONNECT_TYPE = require('../utils/Common').CONNECT_TYPE;
 class Tcp extends Connect {
     constructor({host = '127.0.0.1',
         port = 8765,
@@ -7,7 +8,7 @@ class Tcp extends Connect {
         maxSize = 10000,
         proxy = false,
         } = {}) {
-        super({ host, port, timeout, proxy, maxSize });
+        super({ host, port, timeout, proxy, maxSize ,type:CONNECT_TYPE.TCP});
         const net = require('net');
         if (this._proxy) {
             this._netsvr = net.createConnection(
@@ -23,7 +24,7 @@ class Tcp extends Connect {
         }
     } onConnect(socket) {
         //连接请求事件
-        console.info("connect");
+      //  console.info("connect");
         let st = null;
         if (this._proxy) {
             st = this._netsvr;
@@ -35,7 +36,7 @@ class Tcp extends Connect {
 
         st.on('close', this.onCloseCli.bind(this, st, key));
 
-    } send(msg) {
+    } send(msg,key) {
         if (this._proxy) {
             this._netsvr.write(msg);
         } else {
